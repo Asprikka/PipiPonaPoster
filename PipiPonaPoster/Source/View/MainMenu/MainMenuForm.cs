@@ -89,6 +89,15 @@ namespace PipiPonaPoster.Source.View
                     if (!File.Exists(Program.MAILED_RECIPIENTS_LOG_FILE))
                         File.Create(Program.MAILED_RECIPIENTS_LOG_FILE).Dispose();
 
+                    if (!File.Exists(Program.MAILED_RECIPIENTS_COUNT_LOG_FILE))
+                    {
+                        MailedRecipientsCount newMrc = new();
+                        newMrc.ResetToCurrentDay();
+
+                        string jsonFromMrc = JsonConvert.SerializeObject(newMrc);
+                        File.WriteAllText(Program.MAILED_RECIPIENTS_COUNT_LOG_FILE, jsonFromMrc);
+                    }
+
                     done = true;
                 }
                 catch
