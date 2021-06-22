@@ -41,6 +41,7 @@ namespace PipiPonaPoster.Source
         public const string BASIC_LOG_FILE = "logs/basic_log.txt";
         public const string PREBAN_LOG_FILE = "logs/preban_log.txt";
         public const string MAILED_RECIPIENTS_LOG_FILE = "logs/mailed_recipients_log.txt";
+        public const string MAILED_RECIPIENTS_COUNT_LOG_FILE = "logs/mailed_recipients_count_log.json";
 
         public const string OPTIONS_DIR = "options";
         public const string SENDING_OPTIONS_FILE = "options/sending_options.json";
@@ -56,7 +57,6 @@ namespace PipiPonaPoster.Source
         public const string TEMP_SAVEPOINT_SENDING_OPTIONS_FILE = "temp savepoint/sending_options.json";
         public const string TEMP_SAVEPOINT_MAIL_OPTIONS_FILE = "temp savepoint/mail_options.json";
 
-        private static Assembly _externValidator;
         private static IMainMenuPresentor _mainMenuPresentor;
 
         [STAThread]
@@ -96,12 +96,13 @@ namespace PipiPonaPoster.Source
                 }
                 else if (config.Id == Encoding.UTF8.GetString(CONFIG_ID2))
                 {
-                    var act = new ActivationForm();
+                    ActivationForm act = new();
                     act.ConfigActivated += () =>
                     {
                         MessageBox.Show("АКТИВИРОВАНО!\nПЕРЕЗАПУСТИТЕ ПРИЛОЖЕНИЕ.", "Уведомление", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Environment.Exit(0);
                     };
+
                     Application.Run(act);
                 }
             }

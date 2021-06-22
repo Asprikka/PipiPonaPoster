@@ -6,8 +6,9 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Reflection;
 using System.Collections.Concurrent;
-
+using Newtonsoft.Json;
 using PipiPonaPoster.Source.Enums;
+using PipiPonaPoster.Source.View.MainMenu;
 
 namespace PipiPonaPoster.Source.Model.MainMenu
 {
@@ -90,6 +91,12 @@ namespace PipiPonaPoster.Source.Model.MainMenu
         {
             Program.numSavepoint++;
             File.WriteAllText(Program.NUM_SAVEPOINT_FILE, Program.numSavepoint.ToString());
+
+            string jsonFromMrcLog = File.ReadAllText(Program.MAILED_RECIPIENTS_COUNT_LOG_FILE);
+            var mrc = JsonConvert.DeserializeObject<MailedRecipientsCount>(jsonFromMrcLog);
+            mrc.Count++;
+            string jsonFromMrcObj = JsonConvert.SerializeObject(mrc);
+            File.WriteAllText(Program.MAILED_RECIPIENTS_COUNT_LOG_FILE, jsonFromMrcObj);
         }
 
         protected static void AppendMailedRecipients(string recipient)

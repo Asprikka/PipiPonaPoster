@@ -42,18 +42,18 @@ namespace PipiPonaPoster.Source.Model.SendingOptions
                 ExceptionAccountsList = GetExceptionAccountsList(),
                 BasicAccountsList = GetBasicAccountsList()
             };
-
+            
             DoSpecialOnErrorAfterChecks(invalidFields);
             SendingSpeedWarningCheck(invalidFields, out hasWarning);
 
             if (hasWarning)
                 return false;
-
+            
             SaveChanges(optionsData);
             UpdateSavepoint();
 
             invalidFields = invalidFields.Distinct().ToList();
-
+            
             // true -- has errors
             return invalidFields.Count != 0;
 
@@ -292,11 +292,15 @@ namespace PipiPonaPoster.Source.Model.SendingOptions
 
             if (!Directory.Exists(Program.OPTIONS_DIR))
                 throw new Exception("\'options\' directory were not found!");
-            else
-            {
-                File.Copy(Program.SENDING_OPTIONS_FILE, Program.SAVEPOINT_SENDING_OPTIONS_FILE);
-                File.Copy(Program.MAIL_OPTIONS_FILE, Program.SAVEPOINT_MAIL_OPTIONS_FILE);
-            }
+
+            File.Copy(Program.SENDING_OPTIONS_FILE, Program.SAVEPOINT_SENDING_OPTIONS_FILE);
+            File.Copy(Program.MAIL_OPTIONS_FILE, Program.SAVEPOINT_MAIL_OPTIONS_FILE);
+
+            if (!File.Exists(Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE))
+                File.Copy(Program.SENDING_OPTIONS_FILE, Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE);
+
+            if (!File.Exists(Program.TEMP_SAVEPOINT_MAIL_OPTIONS_FILE))
+                File.Copy(Program.MAIL_OPTIONS_FILE, Program.TEMP_SAVEPOINT_MAIL_OPTIONS_FILE);
         }
     }
 }

@@ -133,11 +133,15 @@ namespace PipiPonaPoster.Source.Model.MailOptions
 
             if (!Directory.Exists(Program.OPTIONS_DIR))
                 throw new Exception("\'options\' directory were not found!");
-            else
-            {
-                File.Copy(Program.SENDING_OPTIONS_FILE, Program.SAVEPOINT_SENDING_OPTIONS_FILE);
-                File.Copy(Program.MAIL_OPTIONS_FILE, Program.SAVEPOINT_MAIL_OPTIONS_FILE);
-            }
+
+            File.Copy(Program.SENDING_OPTIONS_FILE, Program.SAVEPOINT_SENDING_OPTIONS_FILE);
+            File.Copy(Program.MAIL_OPTIONS_FILE, Program.SAVEPOINT_MAIL_OPTIONS_FILE);
+
+            if (!File.Exists(Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE))
+                File.Copy(Program.SENDING_OPTIONS_FILE, Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE);
+
+            if (!File.Exists(Program.TEMP_SAVEPOINT_MAIL_OPTIONS_FILE))
+                File.Copy(Program.MAIL_OPTIONS_FILE, Program.TEMP_SAVEPOINT_MAIL_OPTIONS_FILE);
         }
     }
 }

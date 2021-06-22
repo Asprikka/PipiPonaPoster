@@ -28,14 +28,19 @@ namespace PipiPonaPoster.Source.Model.MainMenu
             try
             {
                 List<RecipientData>? data = ReadExcelDatabase();
-                return SortData(data);
+                var sortedData = SortData(data);
+
+                string msg = $"Количество получателей в сформированном списке составило: {sortedData.Count}";
+                MessageBox.Show(msg, "Сведения по рассылке", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                return sortedData;
             }
             catch (Exception ex)
             {
                 if (ex.ToString().Contains("Оплатить"))
                 {
                     string msg = $"Ваша база данных Excel НЕОПЛАЧЕНА! Некоторые поля для анализа скрыты." +
-                    $"\nРассылка будет остановлена! Попробуйте запустить рассылку заново, когда у вас появится полноцення база данных.";
+                        $"\nРассылка будет остановлена! Попробуйте запустить рассылку заново, когда у вас появится полноцення база данных.";
                     MessageBox.Show(msg, "(!) ОШИБКА (!)", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
@@ -69,15 +74,15 @@ namespace PipiPonaPoster.Source.Model.MainMenu
             ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
 
             // MAGIC NUM
-            if (worksheet.Cells.Rows - 3 < Program.sendingOptions.RecipientsCount)
-            {
-                const string msg = "Указанное в параметрах количество получателей больше, чем есть в сформированом списке." +
-                "\n\nВозможные решения проблемы:\n1) Укажите меньшее количество получателей в параметрах рассылки." +
-                "\n2) Измените критерии отбора получателей (сортировка и фильтр).\n3) Проверьте размер базы данных. Возможно, она слишком мала.";
+            //if (worksheet.Cells.Rows - 3 < Program.sendingOptions.RecipientsCount)
+            //{
+            //    const string msg = "Указанное в параметрах количество получателей больше, чем есть в сформированом списке." +
+            //    "\n\nВозможные решения проблемы:\n1) Укажите меньшее количество получателей в параметрах рассылки." +
+            //    "\n2) Измените критерии отбора получателей (сортировка и фильтр).\n3) Проверьте размер базы данных. Возможно, она слишком мала.";
 
-                MessageBox.Show(msg, "(!) ОШИБКА (!)", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
-            }
+            //    MessageBox.Show(msg, "(!) ОШИБКА (!)", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return null;
+            //}
 
             List<ExcelData> excelData = worksheet.Extract<ExcelData>()
                 .WithProperty(p => p.LotNumber, "B")
@@ -126,20 +131,32 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
         protected static List<RecipientData>? CheckOnRecipientsCountApply(List<RecipientData> resources)
         {
-            if (Program.sendingOptions.RecipientsCount < resources.Count)
+            if (resources.Count == 0)
             {
-                resources.RemoveRange(Program.sendingOptions.RecipientsCount, resources.Count - Program.sendingOptions.RecipientsCount);
-                return resources;
-            }
-            else
-            {
-                const string msg = "Указанное в параметрах количество получателей больше, чем есть в сформированом списке." +
-                    "\n\nВозможные решения проблемы:\n1) Укажите меньшее количество получателей в параметрах рассылки." +
-                    "\n2) Измените критерии отбора получателей (сортировка и фильтр).\n3) Проверьте размер базы данных. Возможно, она слишком мала.";
+                const string msg = "В сформированом списке получилось 0 получателей!" +
+                        "\n\nВозможные решения проблемы:\n1) Укажите бОльшее количество получателей в параметрах рассылки." +
+                        "\n2) Измените критерии отбора получателей (сортировка и фильтр).";
 
                 MessageBox.Show(msg, "(!) ОШИБКА (!)", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
+
+            return resources;
+
+            //if (Program.sendingOptions.RecipientsCount < resources.Count)
+            //{
+            //    resources.RemoveRange(Program.sendingOptions.RecipientsCount, resources.Count - Program.sendingOptions.RecipientsCount);
+            //    return resources;
+            //}
+            //else
+            //{
+            //    const string msg = "Указанное в параметрах количество получателей больше, чем есть в сформированом списке." +
+            //        "\n\nВозможные решения проблемы:\n1) Укажите меньшее количество получателей в параметрах рассылки." +
+            //        "\n2) Измените критерии отбора получателей (сортировка и фильтр).\n3) Проверьте размер базы данных. Возможно, она слишком мала.";
+
+            //    MessageBox.Show(msg, "(!) ОШИБКА (!)", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return null;
+            //}
         }
 
         protected static List<RecipientData>? RemoveExceptionList(List<RecipientData> resources)
@@ -164,9 +181,7 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
             while (reslist.Count > 0)
             {
-                Random r = new();
-
-                int index = r.Next(0, reslist.Count - 1);
+                int index = new Random().Next(0, reslist.Count - 1);
 
                 outlist.Add(reslist.ElementAt(index));
                 reslist.RemoveAt(index);

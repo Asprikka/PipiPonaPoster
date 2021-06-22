@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
-
+using System.IO;
 using PipiPonaPoster.Source.Model;
 using PipiPonaPoster.Source.Model.SendingOptions;
 using PipiPonaPoster.Source.Enums;
@@ -84,7 +84,7 @@ namespace PipiPonaPoster.Source.View
         private void OnFieldsValidationError(List<string> invalidFields)
         {
             const string messageText = "Проверьте выделенные желтым поля на корректность введённых данных и их наличие";
-                        
+            
             HighlightInvalidFields(invalidFields);
             MessageBox.Show(messageText, "(!) ОШИБКА (!)", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }

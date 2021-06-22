@@ -1,5 +1,4 @@
 ﻿using System;
-
 using PipiPonaPoster.Source.View;
 using PipiPonaPoster.Source.Model;
 using PipiPonaPoster.Source.Model.SendingOptions;
@@ -27,7 +26,6 @@ namespace PipiPonaPoster.Source.Presentor
             _view.Open();
         }
 
-
         private void View_SaveOptionChanges(object sender, EventArgs e)
         {
             SendingOptionsDataString fields = _view.GetRequiredFieldsInputData();
@@ -37,7 +35,7 @@ namespace PipiPonaPoster.Source.Presentor
             // до обработки запроса _вьюшкой настроек_
             if (!result.HasErrors)
                 OptionsChanged.Invoke();
-
+            
             _view.HandleSaveChangesResponse(result);
         }
     }

@@ -11,6 +11,7 @@ using PipiPonaPoster.Source.Model.SendingOptions;
 using PipiPonaPoster.Source.Model.MailOptions;
 using PipiPonaPoster.Source.Model.MainMenu;
 using PipiPonaPoster.Source.Presentor;
+using PipiPonaPoster.Source.View.MainMenu;
 
 namespace PipiPonaPoster.Source.View
 {
@@ -170,8 +171,10 @@ namespace PipiPonaPoster.Source.View
                         if (File.Exists(Program.SAVEPOINT_SENDING_OPTIONS_FILE))
                         {
                             string oldSendingOptionsJson = File.ReadAllText(Program.SAVEPOINT_SENDING_OPTIONS_FILE);
-                            var oldSendingOptions = JsonConvert.DeserializeObject<SendingOptionsData>(oldSendingOptionsJson);
-                            sendingOptionsMatches = oldSendingOptions == null || oldSendingOptions.Equals(Program.sendingOptions);
+                            var oldSendingOptions =
+                                JsonConvert.DeserializeObject<SendingOptionsData>(oldSendingOptionsJson);
+                            sendingOptionsMatches = oldSendingOptions == null ||
+                                                    oldSendingOptions.Equals(Program.sendingOptions);
                         }
 
                         bool mailOptionsMatches = false;
@@ -192,9 +195,12 @@ namespace PipiPonaPoster.Source.View
                         bool sendingOptionsMatches = false;
                         if (File.Exists(Program.SAVEPOINT_SENDING_OPTIONS_FILE))
                         {
-                            string oldSendingOptionsJson = File.ReadAllText(Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE);
-                            var oldSendingOptions = JsonConvert.DeserializeObject<SendingOptionsData>(oldSendingOptionsJson);
-                            sendingOptionsMatches = oldSendingOptions == null || oldSendingOptions.Equals(Program.sendingOptions);
+                            string oldSendingOptionsJson =
+                                File.ReadAllText(Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE);
+                            var oldSendingOptions =
+                                JsonConvert.DeserializeObject<SendingOptionsData>(oldSendingOptionsJson);
+                            sendingOptionsMatches = oldSendingOptions == null ||
+                                                    oldSendingOptions.Equals(Program.sendingOptions);
                         }
 
                         bool mailOptionsMatches = false;
@@ -208,8 +214,10 @@ namespace PipiPonaPoster.Source.View
                         return innerValueValid && sendingOptionsMatches && mailOptionsMatches;
                     }
                 }
-                catch
-                { }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
             }
         }
 
@@ -290,7 +298,7 @@ namespace PipiPonaPoster.Source.View
 
                     groupBoxCurrentProcessState.Enabled = false;
                     groupBoxMailingInfo.Enabled = false;
-
+                    
                     buttonContinueMailing.Enabled = false;
                     buttonPauseMailing.Enabled = false;
                     buttonStartNewMailing.Enabled = true;
@@ -589,14 +597,40 @@ namespace PipiPonaPoster.Source.View
                 MessageBox.Show(string.Format("\'{0}\' directory does not exist!", Program.LOG_DIR));
         }
 
-        private void ButtonChangeTheme_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private void ButtonCalculators_Click(object sender, EventArgs e)
         {
             new CalculatorsForm().Show();
+        }
+
+        private void ButtonGetTodaySentMails_Click(object sender, EventArgs e)
+        {
+            const string LOG_FILE_PATH = Program.MAILED_RECIPIENTS_COUNT_LOG_FILE;
+
+            if (!File.Exists(LOG_FILE_PATH))
+            {
+                MailedRecipientsCount newMrc = new();
+                newMrc.ResetToCurrentDay();
+
+                string jsonFromMrc = JsonConvert.SerializeObject(newMrc);
+                File.WriteAllText(LOG_FILE_PATH, jsonFromMrc);
+            }
+
+            string jsonFromLog = File.ReadAllText(LOG_FILE_PATH);
+            if (string.IsNullOrEmpty(jsonFromLog))
+                throw new InvalidOperationException("MAILED_RECIPIENTS_COUNT_LOG_FILE is unexpectedly empty or null!");
+
+            var mrc = JsonConvert.DeserializeObject<MailedRecipientsCount>(jsonFromLog);
+
+            if (mrc.LogDate.DayOfWeek != DateTime.Now.DayOfWeek)
+            {
+                mrc.ResetToCurrentDay();
+
+                string jsonFromMrc = JsonConvert.SerializeObject(mrc);
+                File.WriteAllText(LOG_FILE_PATH, jsonFromMrc);
+            }
+
+            MessageBox.Show($"За сегодня было разослано {mrc.Count} писем.",
+                "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void LinkLabelMe_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => new Process
@@ -626,35 +660,34 @@ namespace PipiPonaPoster.Source.View
 
             if (!Directory.Exists(Program.OPTIONS_DIR))
                 throw new Exception("\'options\' directory were not found!");
-            else
-            {
-                File.Copy(Program.SENDING_OPTIONS_FILE, Program.SAVEPOINT_SENDING_OPTIONS_FILE);
-                File.Copy(Program.MAIL_OPTIONS_FILE, Program.SAVEPOINT_MAIL_OPTIONS_FILE);
-            }
+
+            File.Copy(Program.SENDING_OPTIONS_FILE, Program.SAVEPOINT_SENDING_OPTIONS_FILE);
+            File.Copy(Program.MAIL_OPTIONS_FILE, Program.SAVEPOINT_MAIL_OPTIONS_FILE);
         }
 
         private static void WriteTemporarySavepoint()
         {
             if (!Directory.Exists(Program.OPTIONS_DIR))
                 throw new Exception("\'options\' directory were not found!");
-            else if (!Directory.Exists(Program.TEMP_SAVEPOINT_DIR))
+
+            if (!Directory.Exists(Program.TEMP_SAVEPOINT_DIR))
                 throw new Exception("\'temp savepoint\' directory were not found!");
-            else if (!Directory.Exists(Program.SAVEPOINT_DIR))
+
+            if (!Directory.Exists(Program.SAVEPOINT_DIR))
                 throw new Exception("\'savepoint\' directory were not found!");
-            else
-            {
-                if (File.Exists(Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE))
-                    File.Delete(Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE);
-                File.Copy(Program.SAVEPOINT_SENDING_OPTIONS_FILE, Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE);
 
-                if (File.Exists(Program.TEMP_SAVEPOINT_MAIL_OPTIONS_FILE))
-                    File.Delete(Program.TEMP_SAVEPOINT_MAIL_OPTIONS_FILE);
-                File.Copy(Program.SAVEPOINT_MAIL_OPTIONS_FILE, Program.TEMP_SAVEPOINT_MAIL_OPTIONS_FILE);
+            if (File.Exists(Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE))
+                File.Delete(Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE);
+            File.Copy(Program.SAVEPOINT_SENDING_OPTIONS_FILE, Program.TEMP_SAVEPOINT_SENDING_OPTIONS_FILE);
 
-                if (File.Exists(Program.TEMP_NUM_SAVEPOINT_FILE))
-                    File.Delete(Program.TEMP_NUM_SAVEPOINT_FILE);
-                File.Copy(Program.NUM_SAVEPOINT_FILE, Program.TEMP_NUM_SAVEPOINT_FILE);
-            }
+            if (File.Exists(Program.TEMP_SAVEPOINT_MAIL_OPTIONS_FILE))
+                File.Delete(Program.TEMP_SAVEPOINT_MAIL_OPTIONS_FILE);
+            File.Copy(Program.SAVEPOINT_MAIL_OPTIONS_FILE, Program.TEMP_SAVEPOINT_MAIL_OPTIONS_FILE);
+
+            if (File.Exists(Program.TEMP_NUM_SAVEPOINT_FILE))
+                File.Delete(Program.TEMP_NUM_SAVEPOINT_FILE);
+            File.Copy(Program.NUM_SAVEPOINT_FILE, Program.TEMP_NUM_SAVEPOINT_FILE);
+
         }
     }
 }

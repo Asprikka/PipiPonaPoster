@@ -33,7 +33,7 @@ namespace PipiPonaPoster.Source.View
             this.groupBoxOtherFunctions = new System.Windows.Forms.GroupBox();
             this.buttonSaveMailedRecipients = new System.Windows.Forms.Button();
             this.buttonCalculators = new System.Windows.Forms.Button();
-            this.buttonChangeTheme = new System.Windows.Forms.Button();
+            this.buttonGetTodaySentMails = new System.Windows.Forms.Button();
             this.buttonOpenLogs = new System.Windows.Forms.Button();
             this.groupBoxOutputDataTerminal = new System.Windows.Forms.GroupBox();
             this.textBoxOutputDataTerminal = new System.Windows.Forms.TextBox();
@@ -189,7 +189,7 @@ namespace PipiPonaPoster.Source.View
             // 
             this.groupBoxOtherFunctions.Controls.Add(this.buttonSaveMailedRecipients);
             this.groupBoxOtherFunctions.Controls.Add(this.buttonCalculators);
-            this.groupBoxOtherFunctions.Controls.Add(this.buttonChangeTheme);
+            this.groupBoxOtherFunctions.Controls.Add(this.buttonGetTodaySentMails);
             this.groupBoxOtherFunctions.Controls.Add(this.buttonOpenLogs);
             this.groupBoxOtherFunctions.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBoxOtherFunctions.Location = new System.Drawing.Point(14, 424);
@@ -205,7 +205,7 @@ namespace PipiPonaPoster.Source.View
             // 
             this.buttonSaveMailedRecipients.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonSaveMailedRecipients.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonSaveMailedRecipients.Location = new System.Drawing.Point(7, 32);
+            this.buttonSaveMailedRecipients.Location = new System.Drawing.Point(7, 67);
             this.buttonSaveMailedRecipients.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonSaveMailedRecipients.Name = "buttonSaveMailedRecipients";
             this.buttonSaveMailedRecipients.Size = new System.Drawing.Size(233, 29);
@@ -218,7 +218,7 @@ namespace PipiPonaPoster.Source.View
             // 
             this.buttonCalculators.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonCalculators.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonCalculators.Location = new System.Drawing.Point(8, 67);
+            this.buttonCalculators.Location = new System.Drawing.Point(8, 102);
             this.buttonCalculators.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonCalculators.Name = "buttonCalculators";
             this.buttonCalculators.Size = new System.Drawing.Size(233, 29);
@@ -227,25 +227,24 @@ namespace PipiPonaPoster.Source.View
             this.buttonCalculators.UseVisualStyleBackColor = true;
             this.buttonCalculators.Click += new System.EventHandler(this.ButtonCalculators_Click);
             // 
-            // buttonChangeTheme
+            // buttonGetTodaySentMails
             // 
-            this.buttonChangeTheme.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonChangeTheme.Enabled = false;
-            this.buttonChangeTheme.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonChangeTheme.Location = new System.Drawing.Point(7, 138);
-            this.buttonChangeTheme.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonChangeTheme.Name = "buttonChangeTheme";
-            this.buttonChangeTheme.Size = new System.Drawing.Size(187, 29);
-            this.buttonChangeTheme.TabIndex = 2;
-            this.buttonChangeTheme.Text = "Сменить тему";
-            this.buttonChangeTheme.UseVisualStyleBackColor = true;
-            this.buttonChangeTheme.Click += new System.EventHandler(this.ButtonChangeTheme_Click);
+            this.buttonGetTodaySentMails.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonGetTodaySentMails.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonGetTodaySentMails.Location = new System.Drawing.Point(8, 32);
+            this.buttonGetTodaySentMails.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.buttonGetTodaySentMails.Name = "buttonGetTodaySentMails";
+            this.buttonGetTodaySentMails.Size = new System.Drawing.Size(233, 29);
+            this.buttonGetTodaySentMails.TabIndex = 2;
+            this.buttonGetTodaySentMails.Text = "Кол-во отправленных за сегодня писем";
+            this.buttonGetTodaySentMails.UseVisualStyleBackColor = true;
+            this.buttonGetTodaySentMails.Click += new System.EventHandler(this.ButtonGetTodaySentMails_Click);
             // 
             // buttonOpenLogs
             // 
             this.buttonOpenLogs.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonOpenLogs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.buttonOpenLogs.Location = new System.Drawing.Point(8, 102);
+            this.buttonOpenLogs.Location = new System.Drawing.Point(8, 137);
             this.buttonOpenLogs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonOpenLogs.Name = "buttonOpenLogs";
             this.buttonOpenLogs.Size = new System.Drawing.Size(233, 29);
@@ -611,7 +610,7 @@ namespace PipiPonaPoster.Source.View
         private System.Windows.Forms.Button buttonContinueMailing;
         private System.Windows.Forms.Button buttonStartNewMailing;
         private System.Windows.Forms.GroupBox groupBoxOtherFunctions;
-        private System.Windows.Forms.Button buttonChangeTheme;
+        private System.Windows.Forms.Button buttonGetTodaySentMails;
         private System.Windows.Forms.Button buttonOpenLogs;
         private System.Windows.Forms.GroupBox groupBoxOutputDataTerminal;
         private System.Windows.Forms.TextBox textBoxOutputDataTerminal;
