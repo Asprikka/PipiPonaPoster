@@ -38,6 +38,7 @@ namespace PipiPonaPoster.Source
         public const float PROGRESS_BAR_MAX_VALUE = 1E9f;
 
         public const string LOG_DIR = "logs";
+        public const string DEBUG_LOG = "logs/debug.txt";
         public const string BASIC_LOG_FILE = "logs/basic_log.txt";
         public const string PREBAN_LOG_FILE = "logs/preban_log.txt";
         public const string MAILED_RECIPIENTS_LOG_FILE = "logs/mailed_recipients_log.txt";

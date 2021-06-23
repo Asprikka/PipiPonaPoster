@@ -84,9 +84,9 @@ namespace PipiPonaPoster.Source.Model
                 {
                     ConcurrentQueue<RecipientData> recipients = await reader.GetSortedDataOrNullAsync();
 
-                    if (recipients == null)
+                    if (recipients == null || recipients.IsEmpty)
                     {
-                        MessageBox.Show("Перезапустите рассылку заново!\nПроизошла ошибка обработки данных экселя",
+                        MessageBox.Show("Перезапустите рассылку заново!\nПроизошла ошибка обработки данных экселя\nprivate async Task ExecutePreparingAsync()",
                             "Неизвестная ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         MailingTerminated.Invoke();
                         return;
@@ -141,6 +141,14 @@ namespace PipiPonaPoster.Source.Model
         {
             var recipients = arg as ConcurrentQueue<RecipientData>;
 
+            if (recipients == null || recipients.IsEmpty)
+            {
+                MessageBox.Show("Перезапустите рассылку заново!\nОТСУТСТВУЮТ ПОЛУЧАТЕЛИ RunMailingManager",
+                            "Неизвестная ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MailingTerminated.Invoke();
+                return;
+            }
+
             if (_mailingLaunchInstruction == MailingLaunchInstruction.ContinueOld)
                 ApplySavepointToQueue(ref recipients); // mutates recipients queue
 
@@ -161,6 +169,13 @@ namespace PipiPonaPoster.Source.Model
             recipientsList.RemoveRange(0, Program.numSavepoint);
 
             recipientsQueue = new ConcurrentQueue<RecipientData>(recipientsList);
+
+            if (recipientsQueue == null || recipientsQueue.IsEmpty)
+            {
+                MessageBox.Show("Перезапустите рассылку заново!\nОТСУТСТВУЮТ ПОЛУЧАТЕЛИ ApplySavepointToQueue",
+                            "Неизвестная ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
 
 

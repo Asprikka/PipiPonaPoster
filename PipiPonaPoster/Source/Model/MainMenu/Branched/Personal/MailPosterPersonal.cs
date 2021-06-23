@@ -8,8 +8,8 @@ namespace PipiPonaPoster.Source.Model.MainMenu
     class MailPosterPersonal : MailPoster
     {
         public MailPosterPersonal(
-               ConcurrentQueue<RecipientData> recipients, byte[] memoryStreamData, int recipientsEnumerator, int accountsEnumerator
-               ) : base(recipients, memoryStreamData, recipientsEnumerator, accountsEnumerator)
+               ConcurrentQueue<RecipientData> recipients, int recipientsEnumerator, int accountsEnumerator
+               ) : base(recipients, recipientsEnumerator, accountsEnumerator)
         { }
 
         protected int counterX = 0;

@@ -15,7 +15,6 @@ namespace PipiPonaPoster.Source.Model.MainMenu
     public abstract class MailPoster
     {
         protected MailingData _mailingData;
-        protected byte[] _memoryStreamData;
         protected ConcurrentQueue<RecipientData> Recipients { get; set; }
 
         protected readonly int _accountsEnumerator;
@@ -24,10 +23,9 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
         protected SendingReport _report;
 
-        protected MailPoster(ConcurrentQueue<RecipientData> recipients, byte[] memoryStreamData, int recipientsEnumerator, int accountsEnumerator)
+        protected MailPoster(ConcurrentQueue<RecipientData> recipients, int recipientsEnumerator, int accountsEnumerator)
         {
             Recipients = recipients;
-            _memoryStreamData = memoryStreamData;
             _recipientsEnumerator = recipientsEnumerator;
             _accountsEnumerator = accountsEnumerator;
         }
@@ -41,29 +39,26 @@ namespace PipiPonaPoster.Source.Model.MainMenu
                 MailMessage mail = _mailingData.Mail;
                 SmtpClient smtp = _mailingData.SmtpClient;
 
-                //Stopwatch stopwatch = new();
-                //stopwatch.Start();
+#if (DEBUG == false)
+                smtp.Send(mail);
+#endif
 
-                CustomAssemblyLoadContext context = new();
-                Assembly assembly = Assembly.Load(_memoryStreamData);
-                Type type = assembly.GetType(Decoder.Run(new byte[] { 0x53, 0x65, 0x6e, 0x64,
-                    0x4d, 0x61, 0x69, 0x6c, 0x2e, 0x50, 0x6f, 0x73, 0x74, 0x65, 0x72 }));
-                var method = type.GetMethod(Decoder.Run(new byte[] { 0x53, 0x65, 0x6e, 0x64, 0x4d, 
-                    0x61, 0x69, 0x6c, 0x42, 0x79, 0x53, 0x6d, 0x74, 0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72 }));
-                var instance = Activator.CreateInstance(type);
+                //                CustomAssemblyLoadContext context = new();
+                //                Assembly assembly = Assembly.Load(_memoryStreamData);
+                //                Type type = assembly.GetType(Decoder.Run(new byte[] { 0x53, 0x65, 0x6e, 0x64,
+                //                    0x4d, 0x61, 0x69, 0x6c, 0x2e, 0x50, 0x6f, 0x73, 0x74, 0x65, 0x72 }));
+                //                var method = type.GetMethod(Decoder.Run(new byte[] { 0x53, 0x65, 0x6e, 0x64, 0x4d, 
+                //                    0x61, 0x69, 0x6c, 0x42, 0x79, 0x53, 0x6d, 0x74, 0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72 }));
+                //                var instance = Activator.CreateInstance(type);
+                //#if DEBUG
+                //                method.Invoke(instance, new object[] { smtp, mail, false });
+                //#elif (DEBUG == false)
+                //                method.Invoke(instance, new object[] { smtp, mail, true });
+                //#endif
 
-                #if DEBUG
-                method.Invoke(instance, new object[] { smtp, mail, false });
-                #elif (DEBUG == false)
-                method.Invoke(instance, new object[] { smtp, mail, true });
-                #endif
-
-                context.Unload();
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-
-                //stopwatch.Stop();
-                //File.AppendAllText("logs/stopwatch.txt", $"{stopwatch.ElapsedMilliseconds}\n");
+                //                context.Unload();
+                //                GC.Collect();
+                //                GC.WaitForPendingFinalizers();
 
                 Savepoint();
                 AppendMailedRecipients(mail.To.First().Address);
@@ -89,9 +84,11 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
         protected static void Savepoint()
         {
+            File.WriteAllText(Program.DEBUG_LOG, "Program.numSavepoint++;");
             Program.numSavepoint++;
             File.WriteAllText(Program.NUM_SAVEPOINT_FILE, Program.numSavepoint.ToString());
 
+            File.WriteAllText(Program.DEBUG_LOG, "jsonFromMrcLog");
             string jsonFromMrcLog = File.ReadAllText(Program.MAILED_RECIPIENTS_COUNT_LOG_FILE);
             var mrc = JsonConvert.DeserializeObject<MailedRecipientsCount>(jsonFromMrcLog);
             mrc.Count++;
@@ -101,19 +98,27 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
         protected static void AppendMailedRecipients(string recipient)
         {
+            File.WriteAllText(Program.DEBUG_LOG, "AppendMailedRecipients");
             File.AppendAllText(Program.MAILED_RECIPIENTS_LOG_FILE, $"{recipient}\n");
         }
 
         protected void SetMailingData(SenderType senderType)
         {
+            File.WriteAllText("logs/sendertype.txt", senderType.ToString());
             _currentSenderType = senderType;
 
+            File.WriteAllText(Program.DEBUG_LOG, "recipient");
             RecipientData recipient = GetRecipient();
+            File.WriteAllText(Program.DEBUG_LOG, "sender");
             string sender = GetSender(senderType);
+            File.WriteAllText(Program.DEBUG_LOG, "mail");
             MailMessage mail = GetComposedMail(sender, recipient);
+            File.WriteAllText(Program.DEBUG_LOG, "smtp");
             SmtpClient smtp = GetConfiguredSmtpClient(sender);
 
+            File.WriteAllText(Program.DEBUG_LOG, "_mailingData");
             _mailingData = new MailingData(mail, smtp, recipient, sender);
+            File.WriteAllText(Program.DEBUG_LOG, "_report");
             _report = new SendingReport(SendingEvent.Success, _mailingData.SenderEmail, senderType, _mailingData.Recipient.Email);
         }
 
@@ -156,10 +161,18 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
         protected RecipientData GetRecipient()
         {
+            File.WriteAllText(Program.DEBUG_LOG, "TryDequeue");
             if (Recipients.TryDequeue(out RecipientData recipient))
+            {
+                File.WriteAllText(Program.DEBUG_LOG, "return recipient;");
                 return recipient;
+            }
             else
+            {
+                File.WriteAllText(Program.DEBUG_LOG, "throw new Exception(\"Mailing finished\");");
+                File.WriteAllText(Program.DEBUG_LOG, Recipients.Count.ToString());
                 throw new Exception("Mailing finished");
+            }
         }
 
         protected string GetSender(SenderType senderType) => (senderType == SenderType.BasicAccount)

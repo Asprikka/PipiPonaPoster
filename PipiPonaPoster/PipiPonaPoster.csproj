@@ -11,6 +11,7 @@
     <PackageReference Include="EPPlus" Version="5.7.0" />
     <PackageReference Include="EPPlus.DataExtractor" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.3" />
   </ItemGroup>
 
 </Project>

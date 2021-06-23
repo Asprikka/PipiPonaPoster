@@ -6,8 +6,8 @@ namespace PipiPonaPoster.Source.Model.MainMenu
     public class MailPosterGeneric : MailPoster
     {
         public MailPosterGeneric(
-            ConcurrentQueue<RecipientData> recipients, byte[] memoryStreamData, int recipientsEnumerator, int accountsEnumerator
-            ) : base(recipients, memoryStreamData, recipientsEnumerator, accountsEnumerator)
+            ConcurrentQueue<RecipientData> recipients, int recipientsEnumerator, int accountsEnumerator
+            ) : base(recipients, recipientsEnumerator, accountsEnumerator)
         { }
 
         protected override string GetEmailHtml(RecipientData recipient, LinkedResource firstImage, LinkedResource logoImage)

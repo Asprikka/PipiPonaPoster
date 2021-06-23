@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading;
-
+using System.Windows.Forms;
 using PipiPonaPoster.Source.Enums;
 
 namespace PipiPonaPoster.Source.Model.MainMenu
@@ -23,7 +23,7 @@ namespace PipiPonaPoster.Source.Model.MainMenu
         private readonly Mutex recipientsMtx = new();
         private readonly Mutex terminateMtx = new();
         private List<string> _currentSendersList;
-        private byte[] _memoryStreamData;
+        //private byte[] _memoryStreamData;
         private ConcurrentQueue<RecipientData> Recipients { get; }
 
         private readonly int startRecipientCount;
@@ -40,7 +40,17 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
         public MailingManager(ConcurrentQueue<RecipientData> recipients)
         {
-            Recipients = recipients;
+            if (recipients == null || recipients.IsEmpty)
+            {
+                MessageBox.Show("Перезапустите рассылку заново!\nОТСУТСТВУЮТ ПОЛУЧАТЕЛИ public MailingManager(ConcurrentQueue<RecipientData> recipients)",
+                            "Неизвестная ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else
+            {
+                Recipients = recipients;
+            }
+
             startRecipientCount = Recipients.Count + Program.numSavepoint;
             recipientsCounter = Program.numSavepoint;
             ClearMailedRecipients();
@@ -57,24 +67,29 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
             ClearLogs();
 
-            WebClient wc = new();
-            using Stream stream = wc.OpenRead(Decoder.Run(new byte[] { 0x68, 0x74, 0x74, 0x70, 0x73,
-                0x3a, 0x2f, 0x2f, 0x72, 0x61, 0x77, 0x2e, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x75, 0x73, 0x65,
-                0x72, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x4a, 0x61, 0x73,
-                0x79, 0x6e, 0x63, 0x41, 0x73, 0x70, 0x2f, 0x50, 0x50, 0x50, 0x2d, 0x45, 0x78, 0x74, 0x65, 0x72,
-                0x6e, 0x2d, 0x44, 0x4c, 0x4c, 0x73, 0x2f, 0x6d, 0x61, 0x69, 0x6e, 0x2f, 0x53, 0x65, 0x6e, 0x64,
-                0x4d, 0x61, 0x69, 0x6c, 0x2e, 0x64, 0x6c, 0x6c }));
-            using MemoryStream ms = new();
-            stream.CopyTo(ms);
-            _memoryStreamData = ms.ToArray();
+            //WebClient wc = new();
+            //using Stream stream = wc.OpenRead(Decoder.Run(new byte[] { 0x68, 0x74, 0x74, 0x70, 0x73,
+            //    0x3a, 0x2f, 0x2f, 0x72, 0x61, 0x77, 0x2e, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x75, 0x73, 0x65,
+            //    0x72, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x4a, 0x61, 0x73,
+            //    0x79, 0x6e, 0x63, 0x41, 0x73, 0x70, 0x2f, 0x50, 0x50, 0x50, 0x2d, 0x45, 0x78, 0x74, 0x65, 0x72,
+            //    0x6e, 0x2d, 0x44, 0x4c, 0x4c, 0x73, 0x2f, 0x6d, 0x61, 0x69, 0x6e, 0x2f, 0x53, 0x65, 0x6e, 0x64,
+            //    0x4d, 0x61, 0x69, 0x6c, 0x2e, 0x64, 0x6c, 0x6c }));
+            ////MessageBox.Show("using MemoryStream ms = new();");
+            //using MemoryStream ms = new();
+            //stream.CopyTo(ms);
+            //_memoryStreamData = ms.ToArray();
+            //MessageBox.Show("var tcd_basic = new TimerConstructorData(MailSending, SenderType.BasicAccount, basic_sleeptimer);");
 
             var tcd_basic = new TimerConstructorData(MailSending, SenderType.BasicAccount, basic_sleeptimer);
             var tcd_preban = new TimerConstructorData(MailSending, SenderType.PrebanAccount, preban_sleeptimer);
+            //MessageBox.Show("_timerManager = new TimerManager(new TimerMailingData(tcd_basic), new TimerMailingData(tcd_preban), Recipients);");
             _timerManager = new TimerManager(new TimerMailingData(tcd_basic), new TimerMailingData(tcd_preban), Recipients);
 
             _timerManager.TimeLeftUntilEndChanged += OnUpdateTimeLeftUntilEnd;
 
+            //MessageBox.Show("_timerManager.Run(); 111");
             _timerManager.Run();
+            //MessageBox.Show("_timerManager.Run(); 222");
         }
 
         private static void ClearLogs()
@@ -167,8 +182,8 @@ namespace PipiPonaPoster.Source.Model.MainMenu
                 terminateMtx.ReleaseMutex();
 
                 MailPoster poster = (Program.sendingOptions.MailingMode == MailingMode.Generic)
-                    ? new MailPosterGeneric(Recipients, _memoryStreamData, recipientsCounter, accsCounter)
-                    : new MailPosterPersonal(Recipients, _memoryStreamData, recipientsCounter, accsCounter);
+                    ? new MailPosterGeneric(Recipients, recipientsCounter, accsCounter)
+                    : new MailPosterPersonal(Recipients, recipientsCounter, accsCounter);
 
                 poster.SendMail(senderType, out SendingReport report);
 

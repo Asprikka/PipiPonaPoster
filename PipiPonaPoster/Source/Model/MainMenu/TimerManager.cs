@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Threading;
+using System.Windows.Forms;
 
 using PipiPonaPoster.Source.Enums;
+using Timer = System.Threading.Timer;
 
 namespace PipiPonaPoster.Source.Model.MainMenu
 {
@@ -31,10 +32,12 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
         public TimerManager(TimerMailingData basic, TimerMailingData preban, ConcurrentQueue<RecipientData> Recipients)
         {
+            //MessageBox.Show("public TimerManager 111");
             this.Recipients = Recipients;
 
             _basic = basic;
             _preban = preban;
+            //MessageBox.Show("public TimerManager 222");
         }
 
         public void Dispose()
@@ -47,6 +50,7 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
         public void Run()
         {
+            //MessageBox.Show(" Run()  TimerManager");
             _basic.RunTimer();
             _preban.RunTimer();
 
