@@ -613,18 +613,16 @@ namespace PipiPonaPoster.Source.View
 
         private void ButtonGetTodaySentMails_Click(object sender, EventArgs e)
         {
-            const string LOG_FILE_PATH = Program.MAILED_RECIPIENTS_COUNT_LOG_FILE;
-
-            if (!File.Exists(LOG_FILE_PATH))
+            if (!File.Exists(Program.MAILED_RECIPIENTS_COUNT_LOG_FILE))
             {
                 MailedRecipientsCount newMrc = new();
                 newMrc.ResetToCurrentDay();
 
                 string jsonFromMrc = JsonConvert.SerializeObject(newMrc);
-                File.WriteAllText(LOG_FILE_PATH, jsonFromMrc);
+                File.WriteAllText(Program.MAILED_RECIPIENTS_COUNT_LOG_FILE, jsonFromMrc);
             }
 
-            string jsonFromLog = File.ReadAllText(LOG_FILE_PATH);
+            string jsonFromLog = File.ReadAllText(Program.MAILED_RECIPIENTS_COUNT_LOG_FILE);
             if (string.IsNullOrEmpty(jsonFromLog))
                 throw new InvalidOperationException("MAILED_RECIPIENTS_COUNT_LOG_FILE is unexpectedly empty or null!");
 
@@ -635,7 +633,7 @@ namespace PipiPonaPoster.Source.View
                 mrc.ResetToCurrentDay();
 
                 string jsonFromMrc = JsonConvert.SerializeObject(mrc);
-                File.WriteAllText(LOG_FILE_PATH, jsonFromMrc);
+                File.WriteAllText(Program.MAILED_RECIPIENTS_COUNT_LOG_FILE, jsonFromMrc);
             }
 
             MessageBox.Show($"За сегодня было разослано {mrc.Count} писем.",
