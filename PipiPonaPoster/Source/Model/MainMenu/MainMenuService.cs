@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using PipiPonaPoster.Source.Model.MainMenu;
 using PipiPonaPoster.Source.Enums;
 using PipiPonaPoster.Source.Model.MainMenu.CustomExceptions;
+using System.Collections.Generic;
+using System.IO;
 
 #region pragma
 #pragma warning disable CS8524
@@ -17,12 +19,13 @@ namespace PipiPonaPoster.Source.Model
 {
     public class MainMenuService : IMainMenuService
     {
+        // key (string): db path; value (bool): db is read
+        protected List<ExcelDatabaseState> ExcelDatabasesList { get; set; } = new();
+        protected string CurrentExcelDatabase { get; set; }
+
+        private FileSystemWatcher _excelDatabasesFolderWatcher;
         private MailingManager _mailingManager;
         private Thread _mailingThread;
-
-        private static readonly object locker = new();
-        private ConfirmationState _runMailingConfirmation = ConfirmationState.None;
-        private MailingLaunchInstruction _mailingLaunchInstruction = MailingLaunchInstruction.StartNew;
 
         public event Action<OnlineStatsArgs> OnlineStatsChanged;
         public event Action<TimeSpan> TimeLeftUntilEndChanged;
@@ -35,8 +38,30 @@ namespace PipiPonaPoster.Source.Model
         public event Func<string, Task> OutputTerminalUpdatedAsync;
         public event Func<int, Task> ProgressBarUpdatedAsync;
 
+        private static readonly object locker = new();
+        private ConfirmationState _runMailingConfirmation = ConfirmationState.None;
+        private MailingLaunchInstruction _mailingLaunchInstruction = MailingLaunchInstruction.StartNew;
 
-        public async Task StartNewMailingAsync() => await ExecutePreparingAsync();
+        public async Task StartNewMailingAsync()
+        {
+            ExcelDatabasesList.Update();
+
+            ExcelDatabaseState outDbs;
+            if (!ExcelDatabasesList.TryGetCurrentExcelDatabase(out outDbs))
+            {
+                await OutputTerminalUpdatedAsync.Invoke("\n\nПочта по всем клиентам разослана. Программа ожидает новых БД...\n\n");
+
+                _excelDatabasesFolderWatcher = new FileSystemWatcher(Program.sendingOptions.ExcelDatabasesFolderPath);
+                _excelDatabasesFolderWatcher.Changed += OnExcelDatabasesFolderChanged;
+            }
+
+            await ExecutePreparingAsync();
+        }
+
+        private void OnExcelDatabasesFolderChanged(object sender, FileSystemEventArgs e)
+        {
+            
+        }
 
         public async Task ContinueMailingAsync(ContinueMode mode)
         {
@@ -46,7 +71,9 @@ namespace PipiPonaPoster.Source.Model
                 await ExecutePreparingAsync();
             }
             else if (mode == ContinueMode.Current)
+            {
                 _mailingManager.Continue();
+            }
         }
 
         public void PauseMailing() => _mailingManager.Pause();
@@ -73,39 +100,40 @@ namespace PipiPonaPoster.Source.Model
             {
                 ExcelDatabaseReader reader = Program.sendingOptions.MailingMode switch
                 {
-                    MailingMode.Generic => new ExcelDatabaseReaderGeneric(),
-                    MailingMode.Personal => new ExcelDatabaseReaderPersonal()
+                    MailingMode.Generic => new ExcelDatabaseReaderGeneric(CurrentExcelDatabase),
+                    MailingMode.Personal => new ExcelDatabaseReaderPersonal(CurrentExcelDatabase)
                 };
 
                 reader.OutputTerminalUpdatedAsync += Reader_OutputTerminalUpdatedAsync;
                 reader.ProgressBarUpdatedAsync += Reader_ProgressBarUpdatedAsync;
 
-                if (ExcelDatabaseReader.ValidateOptions())
+                if (!ExcelDatabaseReader.ValidateOptions())
                 {
-                    ConcurrentQueue<RecipientData> recipients = await reader.GetSortedDataOrNullAsync();
-
-                    if (recipients == null || recipients.IsEmpty)
-                    {
-                        MessageBox.Show("Перезапустите рассылку заново!\nПроизошла ошибка обработки данных экселя\nprivate async Task ExecutePreparingAsync()",
-                            "Неизвестная ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        MailingTerminated.Invoke();
-                        return;
-                    }
-
-                    PreparingFinished.Invoke();
-
-                    if (WaitConfirmation())
-                    {
-                        _mailingThread = new(new ParameterizedThreadStart(RunMailingManager));
-                        _mailingThread.Start(recipients);
-                    }
-                    else
-                    {
-                        MailingTerminated.Invoke();
-                        return;
-                    }
+                    throw new EmptyOptionsException();
                 }
-                else throw new EmptyOptionsException();
+
+                ConcurrentQueue<RecipientData> recipients = await reader.GetSortedDataOrNullAsync();
+
+                if (recipients == null || recipients.IsEmpty)
+                {
+                    MessageBox.Show("Перезапустите рассылку заново!\nПроизошла ошибка обработки данных экселя\nprivate async Task ExecutePreparingAsync()",
+                        "Неизвестная ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MailingTerminated.Invoke();
+                    return;
+                }
+
+                PreparingFinished.Invoke();
+
+                if (WaitConfirmation())
+                {
+                    _mailingThread = new(new ParameterizedThreadStart(RunMailingManager));
+                    _mailingThread.Start(recipients);
+                }
+                else
+                {
+                    MailingTerminated.Invoke();
+                    return;
+                }
             }
             catch (EmptyOptionsException)
             {

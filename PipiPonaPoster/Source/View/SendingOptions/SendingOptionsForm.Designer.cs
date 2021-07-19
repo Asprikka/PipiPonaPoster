@@ -37,8 +37,8 @@ namespace PipiPonaPoster.Source.View
             this.labelRecepientsCount = new System.Windows.Forms.Label();
             this.textBoxRecipientsCount = new System.Windows.Forms.TextBox();
             this.labelExcelDatabasePath = new System.Windows.Forms.Label();
-            this.textBoxExcelDatabasePath = new System.Windows.Forms.TextBox();
-            this.buttonChooseExcelDatabase = new System.Windows.Forms.Button();
+            this.textBoxExcelDatabasesFolderPath = new System.Windows.Forms.TextBox();
+            this.buttonChooseExcelDatabasesFolder = new System.Windows.Forms.Button();
             this.labelPassword = new System.Windows.Forms.Label();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.groupBoxPrebanAccounts = new System.Windows.Forms.GroupBox();
@@ -90,10 +90,10 @@ namespace PipiPonaPoster.Source.View
             // 
             // textBoxSpeedForPrebanAccounts
             // 
-            this.textBoxSpeedForPrebanAccounts.Location = new System.Drawing.Point(227, 63);
+            this.textBoxSpeedForPrebanAccounts.Location = new System.Drawing.Point(236, 63);
             this.textBoxSpeedForPrebanAccounts.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.textBoxSpeedForPrebanAccounts.Name = "textBoxSpeedForPrebanAccounts";
-            this.textBoxSpeedForPrebanAccounts.Size = new System.Drawing.Size(98, 20);
+            this.textBoxSpeedForPrebanAccounts.Size = new System.Drawing.Size(89, 20);
             this.textBoxSpeedForPrebanAccounts.TabIndex = 6;
             this.textBoxSpeedForPrebanAccounts.Text = "5";
             // 
@@ -110,10 +110,10 @@ namespace PipiPonaPoster.Source.View
             // 
             // textBoxSpeedForBasicAccounts
             // 
-            this.textBoxSpeedForBasicAccounts.Location = new System.Drawing.Point(220, 29);
+            this.textBoxSpeedForBasicAccounts.Location = new System.Drawing.Point(227, 29);
             this.textBoxSpeedForBasicAccounts.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.textBoxSpeedForBasicAccounts.Name = "textBoxSpeedForBasicAccounts";
-            this.textBoxSpeedForBasicAccounts.Size = new System.Drawing.Size(105, 20);
+            this.textBoxSpeedForBasicAccounts.Size = new System.Drawing.Size(98, 20);
             this.textBoxSpeedForBasicAccounts.TabIndex = 4;
             this.textBoxSpeedForBasicAccounts.Text = "8";
             // 
@@ -141,10 +141,10 @@ namespace PipiPonaPoster.Source.View
             // 
             // textBoxRecipientsCount
             // 
-            this.textBoxRecipientsCount.Location = new System.Drawing.Point(178, 107);
+            this.textBoxRecipientsCount.Location = new System.Drawing.Point(191, 107);
             this.textBoxRecipientsCount.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.textBoxRecipientsCount.Name = "textBoxRecipientsCount";
-            this.textBoxRecipientsCount.Size = new System.Drawing.Size(132, 23);
+            this.textBoxRecipientsCount.Size = new System.Drawing.Size(119, 23);
             this.textBoxRecipientsCount.TabIndex = 3;
             // 
             // labelExcelDatabasePath
@@ -154,31 +154,31 @@ namespace PipiPonaPoster.Source.View
             this.labelExcelDatabasePath.Location = new System.Drawing.Point(10, 300);
             this.labelExcelDatabasePath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelExcelDatabasePath.Name = "labelExcelDatabasePath";
-            this.labelExcelDatabasePath.Size = new System.Drawing.Size(123, 15);
+            this.labelExcelDatabasePath.Size = new System.Drawing.Size(132, 15);
             this.labelExcelDatabasePath.TabIndex = 4;
-            this.labelExcelDatabasePath.Text = "Путь к базе данных:";
+            this.labelExcelDatabasePath.Text = "Путь к базам данных:";
             // 
-            // textBoxExcelDatabasePath
+            // textBoxExcelDatabasesFolderPath
             // 
-            this.textBoxExcelDatabasePath.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.textBoxExcelDatabasePath.Location = new System.Drawing.Point(13, 331);
-            this.textBoxExcelDatabasePath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBoxExcelDatabasePath.Name = "textBoxExcelDatabasePath";
-            this.textBoxExcelDatabasePath.ReadOnly = true;
-            this.textBoxExcelDatabasePath.Size = new System.Drawing.Size(311, 23);
-            this.textBoxExcelDatabasePath.TabIndex = 5;
+            this.textBoxExcelDatabasesFolderPath.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.textBoxExcelDatabasesFolderPath.Location = new System.Drawing.Point(13, 331);
+            this.textBoxExcelDatabasesFolderPath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.textBoxExcelDatabasesFolderPath.Name = "textBoxExcelDatabasesFolderPath";
+            this.textBoxExcelDatabasesFolderPath.ReadOnly = true;
+            this.textBoxExcelDatabasesFolderPath.Size = new System.Drawing.Size(326, 23);
+            this.textBoxExcelDatabasesFolderPath.TabIndex = 5;
             // 
-            // buttonChooseExcelDatabase
+            // buttonChooseExcelDatabasesFolder
             // 
-            this.buttonChooseExcelDatabase.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonChooseExcelDatabase.Location = new System.Drawing.Point(141, 298);
-            this.buttonChooseExcelDatabase.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonChooseExcelDatabase.Name = "buttonChooseExcelDatabase";
-            this.buttonChooseExcelDatabase.Size = new System.Drawing.Size(183, 27);
-            this.buttonChooseExcelDatabase.TabIndex = 6;
-            this.buttonChooseExcelDatabase.Text = "Выбрать файл";
-            this.buttonChooseExcelDatabase.UseVisualStyleBackColor = true;
-            this.buttonChooseExcelDatabase.Click += new System.EventHandler(this.ButtonChooseExcelDatabase_Click);
+            this.buttonChooseExcelDatabasesFolder.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonChooseExcelDatabasesFolder.Location = new System.Drawing.Point(155, 298);
+            this.buttonChooseExcelDatabasesFolder.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.buttonChooseExcelDatabasesFolder.Name = "buttonChooseExcelDatabasesFolder";
+            this.buttonChooseExcelDatabasesFolder.Size = new System.Drawing.Size(184, 27);
+            this.buttonChooseExcelDatabasesFolder.TabIndex = 6;
+            this.buttonChooseExcelDatabasesFolder.Text = "Выбрать файл";
+            this.buttonChooseExcelDatabasesFolder.UseVisualStyleBackColor = true;
+            this.buttonChooseExcelDatabasesFolder.Click += new System.EventHandler(this.ButtonChooseExcelDatabasesFolder_Click);
             // 
             // labelPassword
             // 
@@ -193,10 +193,10 @@ namespace PipiPonaPoster.Source.View
             // 
             // textBoxPassword
             // 
-            this.textBoxPassword.Location = new System.Drawing.Point(151, 487);
+            this.textBoxPassword.Location = new System.Drawing.Point(166, 487);
             this.textBoxPassword.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.textBoxPassword.Name = "textBoxPassword";
-            this.textBoxPassword.Size = new System.Drawing.Size(188, 23);
+            this.textBoxPassword.Size = new System.Drawing.Size(184, 23);
             this.textBoxPassword.TabIndex = 10;
             // 
             // groupBoxPrebanAccounts
@@ -311,10 +311,10 @@ namespace PipiPonaPoster.Source.View
             this.comboBoxMailingMode.Items.AddRange(new object[] {
             "Персональная",
             "Обобщенная"});
-            this.comboBoxMailingMode.Location = new System.Drawing.Point(147, 15);
+            this.comboBoxMailingMode.Location = new System.Drawing.Point(155, 15);
             this.comboBoxMailingMode.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.comboBoxMailingMode.Name = "comboBoxMailingMode";
-            this.comboBoxMailingMode.Size = new System.Drawing.Size(192, 23);
+            this.comboBoxMailingMode.Size = new System.Drawing.Size(184, 23);
             this.comboBoxMailingMode.TabIndex = 17;
             // 
             // labelSelectedDate
@@ -332,10 +332,10 @@ namespace PipiPonaPoster.Source.View
             // textBoxSelectedDate
             // 
             this.textBoxSelectedDate.Enabled = false;
-            this.textBoxSelectedDate.Location = new System.Drawing.Point(141, 73);
+            this.textBoxSelectedDate.Location = new System.Drawing.Point(155, 73);
             this.textBoxSelectedDate.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.textBoxSelectedDate.Name = "textBoxSelectedDate";
-            this.textBoxSelectedDate.Size = new System.Drawing.Size(169, 23);
+            this.textBoxSelectedDate.Size = new System.Drawing.Size(155, 23);
             this.textBoxSelectedDate.TabIndex = 19;
             // 
             // label2
@@ -351,10 +351,10 @@ namespace PipiPonaPoster.Source.View
             // 
             // textBoxInterestRate
             // 
-            this.textBoxInterestRate.Location = new System.Drawing.Point(155, 138);
+            this.textBoxInterestRate.Location = new System.Drawing.Point(166, 138);
             this.textBoxInterestRate.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.textBoxInterestRate.Name = "textBoxInterestRate";
-            this.textBoxInterestRate.Size = new System.Drawing.Size(103, 23);
+            this.textBoxInterestRate.Size = new System.Drawing.Size(116, 23);
             this.textBoxInterestRate.TabIndex = 21;
             // 
             // label3
@@ -386,7 +386,7 @@ namespace PipiPonaPoster.Source.View
             // 
             // textBoxBankGuaranteeFilter_Max
             // 
-            this.textBoxBankGuaranteeFilter_Max.Location = new System.Drawing.Point(54, 63);
+            this.textBoxBankGuaranteeFilter_Max.Location = new System.Drawing.Point(66, 63);
             this.textBoxBankGuaranteeFilter_Max.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.textBoxBankGuaranteeFilter_Max.Name = "textBoxBankGuaranteeFilter_Max";
             this.textBoxBankGuaranteeFilter_Max.Size = new System.Drawing.Size(177, 20);
@@ -406,7 +406,7 @@ namespace PipiPonaPoster.Source.View
             // 
             // textBoxBankGuaranteeFilter_Min
             // 
-            this.textBoxBankGuaranteeFilter_Min.Location = new System.Drawing.Point(54, 32);
+            this.textBoxBankGuaranteeFilter_Min.Location = new System.Drawing.Point(66, 32);
             this.textBoxBankGuaranteeFilter_Min.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.textBoxBankGuaranteeFilter_Min.Name = "textBoxBankGuaranteeFilter_Min";
             this.textBoxBankGuaranteeFilter_Min.Size = new System.Drawing.Size(126, 20);
@@ -432,7 +432,7 @@ namespace PipiPonaPoster.Source.View
             "Произвольная (рекомендуется)",
             "По возрастанию",
             "По убыванию"});
-            this.comboBoxOrderByBG.Location = new System.Drawing.Point(133, 519);
+            this.comboBoxOrderByBG.Location = new System.Drawing.Point(147, 516);
             this.comboBoxOrderByBG.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.comboBoxOrderByBG.Name = "comboBoxOrderByBG";
             this.comboBoxOrderByBG.Size = new System.Drawing.Size(192, 21);
@@ -498,8 +498,8 @@ namespace PipiPonaPoster.Source.View
             this.Controls.Add(this.groupBoxPrebanAccounts);
             this.Controls.Add(this.textBoxPassword);
             this.Controls.Add(this.labelPassword);
-            this.Controls.Add(this.buttonChooseExcelDatabase);
-            this.Controls.Add(this.textBoxExcelDatabasePath);
+            this.Controls.Add(this.buttonChooseExcelDatabasesFolder);
+            this.Controls.Add(this.textBoxExcelDatabasesFolderPath);
             this.Controls.Add(this.labelExcelDatabasePath);
             this.Controls.Add(this.textBoxRecipientsCount);
             this.Controls.Add(this.labelRecepientsCount);
@@ -533,8 +533,8 @@ namespace PipiPonaPoster.Source.View
         private System.Windows.Forms.Label labelRecepientsCount;
         private System.Windows.Forms.TextBox textBoxRecipientsCount;
         private System.Windows.Forms.Label labelExcelDatabasePath;
-        private System.Windows.Forms.TextBox textBoxExcelDatabasePath;
-        private System.Windows.Forms.Button buttonChooseExcelDatabase;
+        private System.Windows.Forms.TextBox textBoxExcelDatabasesFolderPath;
+        private System.Windows.Forms.Button buttonChooseExcelDatabasesFolder;
         private System.Windows.Forms.Label labelPassword;
         private System.Windows.Forms.TextBox textBoxPassword;
         private System.Windows.Forms.GroupBox groupBoxPrebanAccounts;

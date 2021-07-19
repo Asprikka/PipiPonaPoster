@@ -17,7 +17,7 @@ namespace PipiPonaPoster.Source.Model.SendingOptions
         public double InterestRate { get; init; }
         public int SendingSpeedForBasicAccounts { get; init; }
         public int SendingSpeedForPrebanAccounts { get; init; }
-        public string ExcelDatabasePath { get; init; }
+        public string ExcelDatabasesFolderPath { get; init; }
         public int MinBankGuaranteeFilter { get; init; }
         public int MaxBankGuaranteeFilter { get; init; }
         public string Password { get; init; }

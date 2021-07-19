@@ -14,7 +14,6 @@ namespace PipiPonaPoster.Source.Presentor
         private readonly IMainMenuView _view;
         private readonly IMainMenuService _model;
 
-
         public MainMenuPresentor()
         {
             _model = new MainMenuService();

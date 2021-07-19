@@ -41,7 +41,7 @@ namespace PipiPonaPoster.Source.View
             textBoxRecipientsCount.Text = settings.RecipientsCount.ToString();
             textBoxSpeedForBasicAccounts.Text = settings.SendingSpeedForBasicAccounts.ToString();
             textBoxSpeedForPrebanAccounts.Text = settings.SendingSpeedForPrebanAccounts.ToString();
-            textBoxExcelDatabasePath.Text = settings.ExcelDatabasePath;
+            textBoxExcelDatabasesFolderPath.Text = settings.ExcelDatabasePath;
             textBoxBankGuaranteeFilter_Min.Text = settings.MinBankGuaranteeFilter.ToString();
             textBoxBankGuaranteeFilter_Max.Text = settings.MaxBankGuaranteeFilter.ToString();
             textBoxPassword.Text = settings.Password;
@@ -58,7 +58,7 @@ namespace PipiPonaPoster.Source.View
             InterestRate = textBoxInterestRate.Text,
             SendingSpeedForBasicAccounts = textBoxSpeedForBasicAccounts.Text,
             SendingSpeedForPrebanAccounts = textBoxSpeedForPrebanAccounts.Text,
-            ExcelDatabasePath = textBoxExcelDatabasePath.Text,
+            ExcelDatabasesFolderPath = textBoxExcelDatabasesFolderPath.Text,
             MinBankGuaranteeFilter = textBoxBankGuaranteeFilter_Min.Text,
             MaxBankGuaranteeFilter = textBoxBankGuaranteeFilter_Max.Text,
             Password = textBoxPassword.Text,
@@ -101,7 +101,7 @@ namespace PipiPonaPoster.Source.View
                     "InterestRate" => textBoxInterestRate,
                     "SendingSpeedForBasicAccounts" => textBoxSpeedForBasicAccounts,
                     "SendingSpeedForPrebanAccounts" => textBoxSpeedForPrebanAccounts,
-                    "ExcelDatabasePath" => textBoxExcelDatabasePath,
+                    "ExcelDatabasesFolderPath" => textBoxExcelDatabasesFolderPath,
                     "MinBankGuaranteeFilter" => textBoxBankGuaranteeFilter_Min,
                     "MaxBankGuaranteeFilter" => textBoxBankGuaranteeFilter_Max,
                     "Password" => textBoxPassword,
@@ -117,12 +117,12 @@ namespace PipiPonaPoster.Source.View
             }
         }
 
-        private void ButtonChooseExcelDatabase_Click(object sender, EventArgs e)
+        private void ButtonChooseExcelDatabasesFolder_Click(object sender, EventArgs e)
         {
-            var openFileDialog = new OpenFileDialog();
+            var folderBrowserDialog = new FolderBrowserDialog();
 
-            if (openFileDialog.ShowDialog() == DialogResult.OK & openFileDialog.FileName.Contains(".xlsx"))
-                this.textBoxExcelDatabasePath.Text = openFileDialog.FileName;
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                this.textBoxExcelDatabasesFolderPath.Text = folderBrowserDialog.SelectedPath;
         }
 
         private void ButtonSaveChanges_Click(object sender, EventArgs e)

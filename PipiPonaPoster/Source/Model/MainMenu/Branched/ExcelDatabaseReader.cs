@@ -15,15 +15,26 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 {
     public abstract class ExcelDatabaseReader
     {
-        protected int errorCount = 0;
+        private string ExcelDatabasePath { get; set; }
 
         public event Func<string, Task> OutputTerminalUpdatedAsync;
         public event Func<int, Task> ProgressBarUpdatedAsync;
 
+        protected int errorCount = 0;
 
-        public static bool ValidateOptions() => Program.sendingOptions != null && Program.mailOptions != null;
+        public ExcelDatabaseReader(string excelDatabasePath)
+        {
+            ExcelDatabasePath = excelDatabasePath;
+        }
 
-        public async Task<ConcurrentQueue<RecipientData>> GetSortedDataOrNullAsync() => await Task.Run(() =>
+        public static bool ValidateOptions()
+        {
+            return Program.sendingOptions != null 
+                && Program.mailOptions != null;
+        }
+
+        public async Task<ConcurrentQueue<RecipientData>> GetSortedDataOrNullAsync() =>
+        await Task.Run(() =>
         {
             try
             {
@@ -51,15 +62,14 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 
                 return null;
             }
-        }); 
-
+        });
 
         protected List<RecipientData>? ReadExcelDatabase()
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            string excelDatabasePath = File.Exists(Program.sendingOptions.ExcelDatabasePath)
-                ? Program.sendingOptions.ExcelDatabasePath : null;
+            string excelDatabasePath = File.Exists(ExcelDatabasePath)
+                ? ExcelDatabasePath : null;
 
             if (excelDatabasePath == null)
             {

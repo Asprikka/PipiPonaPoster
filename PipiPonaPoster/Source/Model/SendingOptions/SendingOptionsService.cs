@@ -32,7 +32,7 @@ namespace PipiPonaPoster.Source.Model.SendingOptions
                 InterestRate = GetInterestRate(invalidFields),
                 SendingSpeedForBasicAccounts = GetSendingSpeedForBasicAccounts(invalidFields),
                 SendingSpeedForPrebanAccounts = GetSendingSpeedForPrebanAccounts(invalidFields),
-                ExcelDatabasePath = GetExcelDatabasePath(invalidFields),
+                ExcelDatabasesFolderPath = GetExcelDatabasesFolderPath(invalidFields),
                 MinBankGuaranteeFilter = GetMinBankGuaranteeFilter(invalidFields),
                 MaxBankGuaranteeFilter = GetMaxBankGuaranteeFilter(invalidFields),
                 Password = GetPassword(invalidFields),
@@ -181,13 +181,13 @@ namespace PipiPonaPoster.Source.Model.SendingOptions
                 }
             }
 
-            string GetExcelDatabasePath(List<string> invalidFields)
+            string GetExcelDatabasesFolderPath(List<string> invalidFields)
             {
-                if (!string.IsNullOrEmpty(fieldsInputData.ExcelDatabasePath))
-                    return fieldsInputData.ExcelDatabasePath;
+                if (!string.IsNullOrEmpty(fieldsInputData.ExcelDatabasesFolderPath))
+                    return fieldsInputData.ExcelDatabasesFolderPath;
                 else
                 {
-                    invalidFields.Add("ExcelDatabasePath");
+                    invalidFields.Add("ExcelDatabasesFolderPath");
                     return null;
                 }
             }

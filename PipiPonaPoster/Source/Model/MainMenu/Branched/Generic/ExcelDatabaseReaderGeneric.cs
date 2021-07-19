@@ -9,6 +9,10 @@ namespace PipiPonaPoster.Source.Model.MainMenu
 {
     public class ExcelDatabaseReaderGeneric : ExcelDatabaseReader
     {
+        public ExcelDatabaseReaderGeneric(string excelDatabasePath)
+            : base(excelDatabasePath)
+        { }
+
         protected override List<RecipientData> ApplySortConditions(List<RecipientData> resources)
         {
             var res1 = resources.Distinct()

@@ -8,7 +8,7 @@
         public string InterestRate { get; init; } // Процентная ставка
         public string SendingSpeedForBasicAccounts { get; init; }
         public string SendingSpeedForPrebanAccounts { get; init; }
-        public string ExcelDatabasePath { get; init; }
+        public string ExcelDatabasesFolderPath { get; init; }
         public string MinBankGuaranteeFilter { get; init; }
         public string MaxBankGuaranteeFilter { get; init; }
         public string Password { get; init; }

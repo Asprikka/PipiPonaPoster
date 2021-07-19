@@ -467,7 +467,7 @@ namespace PipiPonaPoster.Source.View
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(345, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Срок действия ключа активации: до 30.06.2021 (включительно)";
+            this.label1.Text = "Срок действия ключа активации: до 31.07.2021 (включительно)";
             // 
             // groupBoxCurrentProcessState
             // 
