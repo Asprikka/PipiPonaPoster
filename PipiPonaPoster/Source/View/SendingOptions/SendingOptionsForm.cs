@@ -41,7 +41,7 @@ namespace PipiPonaPoster.Source.View
             textBoxRecipientsCount.Text = settings.RecipientsCount.ToString();
             textBoxSpeedForBasicAccounts.Text = settings.SendingSpeedForBasicAccounts.ToString();
             textBoxSpeedForPrebanAccounts.Text = settings.SendingSpeedForPrebanAccounts.ToString();
-            textBoxExcelDatabasesFolderPath.Text = settings.ExcelDatabasePath;
+            textBoxExcelDatabasesFolderPath.Text = settings.ExcelDatabasesFolderPath;
             textBoxBankGuaranteeFilter_Min.Text = settings.MinBankGuaranteeFilter.ToString();
             textBoxBankGuaranteeFilter_Max.Text = settings.MaxBankGuaranteeFilter.ToString();
             textBoxPassword.Text = settings.Password;

@@ -41,7 +41,7 @@ namespace PipiPonaPoster.Source.Model.SendingOptions
                 && this.InterestRate == eq.InterestRate
                 && this.SendingSpeedForBasicAccounts == eq.SendingSpeedForBasicAccounts
                 && this.SendingSpeedForPrebanAccounts == eq.SendingSpeedForPrebanAccounts
-                && this.ExcelDatabasePath == eq.ExcelDatabasePath
+                && this.ExcelDatabasesFolderPath == eq.ExcelDatabasesFolderPath
                 && this.MinBankGuaranteeFilter == eq.MinBankGuaranteeFilter
                 && this.MaxBankGuaranteeFilter == eq.MaxBankGuaranteeFilter
                 && this.Password == eq.Password

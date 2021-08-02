@@ -176,7 +176,7 @@ namespace PipiPonaPoster.Source.View
             this.buttonChooseExcelDatabasesFolder.Name = "buttonChooseExcelDatabasesFolder";
             this.buttonChooseExcelDatabasesFolder.Size = new System.Drawing.Size(184, 27);
             this.buttonChooseExcelDatabasesFolder.TabIndex = 6;
-            this.buttonChooseExcelDatabasesFolder.Text = "Выбрать файл";
+            this.buttonChooseExcelDatabasesFolder.Text = "Выбрать папку";
             this.buttonChooseExcelDatabasesFolder.UseVisualStyleBackColor = true;
             this.buttonChooseExcelDatabasesFolder.Click += new System.EventHandler(this.ButtonChooseExcelDatabasesFolder_Click);
             // 

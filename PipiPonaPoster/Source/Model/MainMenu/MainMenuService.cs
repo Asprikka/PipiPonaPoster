@@ -11,9 +11,7 @@ using PipiPonaPoster.Source.Model.MainMenu.CustomExceptions;
 using System.Collections.Generic;
 using System.IO;
 
-#region pragma
 #pragma warning disable CS8524
-#endregion
 
 namespace PipiPonaPoster.Source.Model
 {
@@ -46,21 +44,29 @@ namespace PipiPonaPoster.Source.Model
         {
             ExcelDatabasesList.Update();
 
-            ExcelDatabaseState outDbs;
-            if (!ExcelDatabasesList.TryGetCurrentExcelDatabase(out outDbs))
+            if (!ExcelDatabasesList.TryGetCurrentExcelDatabase(out ExcelDatabaseState outDbs))
             {
                 await OutputTerminalUpdatedAsync.Invoke("\n\nПочта по всем клиентам разослана. Программа ожидает новых БД...\n\n");
 
                 _excelDatabasesFolderWatcher = new FileSystemWatcher(Program.sendingOptions.ExcelDatabasesFolderPath);
                 _excelDatabasesFolderWatcher.Changed += OnExcelDatabasesFolderChanged;
+
+                return;
             }
 
+            CurrentExcelDatabase = outDbs.Path;
             await ExecutePreparingAsync();
         }
 
         private void OnExcelDatabasesFolderChanged(object sender, FileSystemEventArgs e)
         {
-            
+            ExcelDatabasesList.Update();
+
+            if (!ExcelDatabasesList.TryGetCurrentExcelDatabase(out ExcelDatabaseState outDbs))
+                return;
+
+            CurrentExcelDatabase = outDbs.Path;
+            Task.Run(ExecutePreparingAsync);
         }
 
         public async Task ContinueMailingAsync(ContinueMode mode)
@@ -167,9 +173,7 @@ namespace PipiPonaPoster.Source.Model
 
         private void RunMailingManager(object arg)
         {
-            var recipients = arg as ConcurrentQueue<RecipientData>;
-
-            if (recipients == null || recipients.IsEmpty)
+            if (arg is not ConcurrentQueue<RecipientData> recipients || recipients.IsEmpty)
             {
                 MessageBox.Show("Перезапустите рассылку заново!\nОТСУТСТВУЮТ ПОЛУЧАТЕЛИ RunMailingManager",
                             "Неизвестная ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
